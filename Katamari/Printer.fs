@@ -91,6 +91,9 @@
         let status size =
             printfn "Your katamari is %Acm" size
 
+        let final_size size =
+            printfn "Your final katamar size is %Acm" size
+
         let display_items (items:Item list) =
             match items.Length with
             | 0 -> printfn "There is nothing there."

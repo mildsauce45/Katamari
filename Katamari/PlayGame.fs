@@ -5,6 +5,27 @@
         open Printer
         open Input
 
+        let recalc_katamari (data:GameData) =
+            let volume = (data.katamari |> List.map (fun i -> 4.19 * (i.size / 2.0) ** 3.0)) @ [(4.1887 * data.level.Value.katamari) ** 3.0] |> List.reduce (+)
+            ((volume / 4.1887) ** (1.0/3.0)) * 2.0
+
+        let check_win (data:GameData) =
+            let size = recalc_katamari data
+            size >= data.level.Value.goal
+
+        let quit (data:GameData) =
+            let announce_win () =
+                let size = recalc_katamari data
+                Printer.final_size size
+                match check_win data with
+                | true -> Printer.win()
+                | _ -> Printer.failure()
+                
+            announce_win()
+            printfn "Exiting level"
+            Printer.royal_rainbow()
+            { data with playingLevel=false; level=None; katamari=[] }
+
         let in_bounds (place:Coords) (data:GameData) =
             place.x >= 0 && place.x < data.level.Value.dimensions.x && place.y >= 0 && place.y < data.level.Value.dimensions.y
 
@@ -35,7 +56,11 @@
             data
 
         let tick_time (data:GameData) =
-            { data with level=Some { data.level.Value with time=data.level.Value.time - 1} }
+            let newData = { data with level=Some { data.level.Value with time=data.level.Value.time - 1} }
+
+            match newData.level.Value.time with
+            | t when t = 60 -> Printer.minute_warning() |> ignore; newData
+            | t when t = 0 -> Printer.times_up() |> ignore; quit newData            
 
         let move (dir:int*int) (data:GameData) =
             let x,y = dir
@@ -59,11 +84,7 @@
 
         let west (data:GameData) =
             Printer.move West
-            move (-1,0) data
-
-        let recalc_katamari (data:GameData) =
-            let volume = (data.katamari |> List.map (fun i -> 4.19 * (i.size / 2.0) ** 3.0)) @ [(4.1887 * data.level.Value.katamari) ** 3.0] |> List.reduce (+)
-            ((volume / 4.1887) ** (1.0/3.0)) * 2.0
+            move (-1,0) data        
 
         let roll (data:GameData) =
             let place = data.location;
