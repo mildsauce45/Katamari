@@ -24,7 +24,7 @@
 
         let try_level data =
             printf "Available levels are: "
-            Levels.get_levels |> List.map (fun l -> l.name.Trim()) |> List.iter (printf "%s")
+            Levels.get_levels |> List.map (fun l -> l.name.Trim()) |> List.iter (printf "%s ")
             printfn ""
                         
             match Levels.get_level (Input.request "Which level would you like to play? ") with
