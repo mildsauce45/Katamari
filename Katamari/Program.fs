@@ -36,7 +36,7 @@
             | "quit" | "q" -> quit data
             | "progress" | "pr" -> progress data
             | "play" | "pl" -> try_level data
-            | _ -> Input.invalid_command data
+            | _ -> printfn "play, progress, save, quit" |> ignore; data
 
         [<EntryPoint>]
         let main argv = 

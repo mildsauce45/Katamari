@@ -92,7 +92,7 @@
             printfn "Your katamari is %Acm" size
 
         let final_size size =
-            printfn "Your final katamar size is %Acm" size
+            printfn "Your final katamari size is %Acm" size
 
         let display_items (items:Item list) =
             match items.Length with

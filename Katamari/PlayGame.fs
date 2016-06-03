@@ -60,7 +60,8 @@
 
             match newData.level.Value.time with
             | t when t = 60 -> Printer.minute_warning() |> ignore; newData
-            | t when t = 0 -> Printer.times_up() |> ignore; quit newData            
+            | t when t = 0 -> Printer.times_up() |> ignore; quit newData
+            | _ -> newData         
 
         let move (dir:int*int) (data:GameData) =
             let x,y = dir
@@ -132,7 +133,8 @@
             | "south" | "s" -> south data
             | "west" | "w" -> west data
             | "roll" | "r" -> roll data
-            | _ -> Input.invalid_command data
+            | "quit" | "q" -> quit data
+            | _ -> printfn "look, time, north, east, south, west, roll, quit" |> ignore; data
 
         let play (data:GameData) =
 
