@@ -3,6 +3,8 @@
 
     module Printer =
 
+        open System
+
         let banner () =
             printfn "______ __      _____                                _____"
             printfn "___  //_/_____ __  /______ _______ _________ __________(_)"
@@ -100,3 +102,15 @@
             | _ -> printfn "There are %i items" items.Length
 
             items |> List.map (fun i -> i.name) |> List.iter (printfn "You see a %s")
+
+        let desc_katamari (data:GameData) size =
+            printfn "What a beautiful katamari!"
+            printfn "Your katamari is %Acm" size
+
+            match data.katamari with
+            | [] -> printfn "You katamari is totally empty! It's a blank slate!"
+            | _ -> printfn "Your katamari is made up of %s" (System.String.Join(", ", data.katamari |> List.map (fun i -> i.name )))
+
+            match size with
+            | s when s > data.level.Value.goal -> printf ""
+            | _ -> printfn "Move with N, S, E, W, and use Roll Up to add items to your Katamari"

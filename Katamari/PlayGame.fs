@@ -17,7 +17,7 @@
 
         // Just like skip above, this method is not in every version of F#, so this is my shim
         let take count list =
-            if count <= 0 then list else
+            if count <= 0 then [] else
             let rec loop i prev lst =
                 match lst with
                 | _ when i = 0 -> prev
@@ -45,11 +45,11 @@
             announce_win()
             printfn "Exiting level"
             Printer.royal_rainbow()
-            { data with playingLevel=false; level=None; katamari=[] }
+            { data with playingLevel=false; level=None; katamari=[]; progress=(-1) }
 
         let in_bounds (place:Coords) (data:GameData) =
             place.x >= 0 && place.x < data.level.Value.dimensions.x && place.y >= 0 && place.y < data.level.Value.dimensions.y
-
+        
         let getDirection d =
             match d with
             | "north" | "n" -> (0,-1)
@@ -57,7 +57,7 @@
             | "east" | "e" -> (1, 0)
             | "west" | "w" -> (-1, 0)
             | "here" | "h" -> (0, 0)
-            | _ -> Input.invalid_command (0, 0)
+            | _ -> invalidArg "d" "other pattern match should have caught this"
 
         let look_at (data:GameData) (dir:int*int) =
             let x,y = dir // deconstruct the tuple into usable values
@@ -68,7 +68,14 @@
             | false -> printfn "To that way lies the void"
 
         let look (data:GameData) =
-            look_at data (getDirection <| Input.request "Look which direction? (N, S, E, W, Here) ")
+            //look_at data (getDirection <| Input.request "Look which direction? (N, S, E, W, Here) ")
+            let options = "N, S, E, W, Here, or Katamari"
+            let inp = Input.request <| sprintf "Look which direction? (%s) " options
+
+            match inp with
+            | "katamari" | "k" -> Printer.desc_katamari data (recalc_katamari data)
+            | "north" | "n" | "south" | "s" | "east" | "e" | "west" | "w" | "here" |"h" -> look_at data <| getDirection inp
+            | _ -> sprintf "Please choose a valid option, options are %s" options |> printfn "%s"
 
             data
 

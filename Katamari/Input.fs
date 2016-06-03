@@ -10,8 +10,4 @@
 
             inp <- Console.ReadLine()
             
-            inp.ToLower()
-
-        let invalid_command obj =
-            printfn "I'm sorry thats not a valid command"
-            obj
+            inp.ToLower()        
