@@ -19,7 +19,7 @@
             data
 
         let load_level (data:GameData) (level:Level) =
-            let levelCopy = { level with name="copy" }
+            let levelCopy = level;
             { data with playingLevel=true; levelName=level.name; level=Some levelCopy; location=levelCopy.location; progress=level.number }
 
         let try_level data =
