@@ -5,6 +5,27 @@
         open Printer
         open Input
 
+        // This method is not in every version of F# so i'll just add it here
+        let skip count list =
+            if count <= 0 then list else
+            let rec loop i lst = 
+                match lst with
+                | _ when i = 0 -> lst
+                | _::t -> loop (i-1) t
+                | [] -> invalidArg "count" "value of count is invalid"
+            loop count list
+
+        // Just like skip above, this method is not in every version of F#, so this is my shim
+        let take count list =
+            if count <= 0 then list else
+            let rec loop i prev lst =
+                match lst with
+                | _ when i = 0 -> prev
+                | h::_ when lst.Length = 1 -> prev @ [h]
+                | h::rest -> loop (i-1) (prev @ [h]) rest
+                | _ -> invalidArg "count" "something went awry"
+            loop count [] list
+
         let recalc_katamari (data:GameData) =
             let volume = (data.katamari |> List.map (fun i -> 4.19 * ((i.size / 2.0) ** 3.0))) @ [4.19 * (data.level.Value.katamari / 2.0) ** 3.0] |> List.reduce (+)
             ((volume / 4.19) ** (1.0/3.0)) * 2.0
@@ -108,7 +129,7 @@
                     let idx = rand.Next(data.katamari.Length)
 
                     let itemToDrop = data.katamari.[idx]
-                    let newItems = (data.katamari |> List.take idx) @ (data.katamari |> List.skip (idx + 1))
+                    let newItems = (data.katamari |> take idx) @ (data.katamari |> skip (idx + 1))
                     { data with katamari=newItems; level=Some({data.level.Value with items=data.level.Value.items @ [{ item=itemToDrop; location=place; }]}) }
 
             let report_status (data:GameData) =
