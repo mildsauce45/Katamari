@@ -3,7 +3,7 @@
 
         open GameData
 
-        let banana = { name="Banana"; description="You don't need to be a monkey to eat this."; size=50.0 }
+        let banana = { name="Banana"; description="You don't need to be a monkey to eat this."; size=10.0 }
         let eraser = { name="Eraser"; description="Rub and erase. But it makes a mess."; size=8.0 }
         let strawberry = { name="Stawberry"; description="Don't try to eat the whole ting in one bite!"; size=10.8 }
         let wcrayon = { name="White Crayon"; description="A white crayon. Using this on white paper is pointless"; size=5.9 }

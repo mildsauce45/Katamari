@@ -6,8 +6,8 @@
         open Input
 
         let recalc_katamari (data:GameData) =
-            let volume = (data.katamari |> List.map (fun i -> 4.19 * (i.size / 2.0) ** 3.0)) @ [(4.1887 * data.level.Value.katamari) ** 3.0] |> List.reduce (+)
-            ((volume / 4.1887) ** (1.0/3.0)) * 2.0
+            let volume = (data.katamari |> List.map (fun i -> 4.19 * ((i.size / 2.0) ** 3.0))) @ [4.19 * (data.level.Value.katamari / 2.0) ** 3.0] |> List.reduce (+)
+            ((volume / 4.19) ** (1.0/3.0)) * 2.0
 
         let check_win (data:GameData) =
             let size = recalc_katamari data
