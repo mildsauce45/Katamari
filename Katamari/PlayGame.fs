@@ -27,12 +27,12 @@
             loop count [] list
 
         let recalc_katamari (data:GameData) =
-            let volume = (data.katamari |> List.map (fun i -> 4.19 * ((i.size / 2.0) ** 3.0))) @ [4.19 * (data.level.Value.katamari / 2.0) ** 3.0] |> List.reduce (+)
+            let volume = (data.katamari |> List.map (fun i -> 4.19 * ((i.size / 2.0) ** 3.0))) @ [4.19 * (data.level.katamari / 2.0) ** 3.0] |> List.reduce (+)
             ((volume / 4.19) ** (1.0/3.0)) * 2.0
 
         let check_win (data:GameData) =
             let size = recalc_katamari data
-            size >= data.level.Value.goal
+            size >= data.level.goal
 
         let quit (data:GameData) =
             let announce_win () =
@@ -41,15 +41,15 @@
                 match check_win data with
                 | true -> Printer.win()
                 | _ -> Printer.failure()
-                
+
             announce_win()
             printfn "Exiting level"
             Printer.royal_rainbow()
-            { data with playingLevel=false; level=None; katamari=[]; progress=(-1) }
+            { data with playingLevel=false }
 
         let in_bounds (place:Coords) (data:GameData) =
-            place.x >= 0 && place.x < data.level.Value.dimensions.x && place.y >= 0 && place.y < data.level.Value.dimensions.y
-        
+            place.x >= 0 && place.x < data.level.dimensions.x && place.y >= 0 && place.y < data.level.dimensions.y
+
         let getDirection d =
             match d with
             | "north" | "n" -> (0,-1)
@@ -64,11 +64,10 @@
             let place = { data.location with x=data.location.x + x; y=data.location.y + y } // calculate the place to look at            
 
             match in_bounds place data with
-            | true -> Levels.get_items_at_space place data.level.Value |> Printer.display_items |> ignore
+            | true -> Levels.get_items_at_space place data.level |> Printer.display_items |> ignore
             | false -> printfn "To that way lies the void"
 
         let look (data:GameData) =
-            //look_at data (getDirection <| Input.request "Look which direction? (N, S, E, W, Here) ")
             let options = "N, S, E, W, Here, or Katamari"
             let inp = Input.request <| sprintf "Look which direction? (%s) " options
 
@@ -80,13 +79,13 @@
             data
 
         let time (data:GameData) =
-            printfn "You have %im%is left to get your katamari up to %Acm, better hurry!" (data.level.Value.time / 60) (data.level.Value.time % 60) data.level.Value.goal
+            printfn "You have %im%is left to get your katamari up to %Acm, better hurry!" (data.level.time / 60) (data.level.time % 60) data.level.goal
             data
 
         let tick_time (data:GameData) =
-            let newData = { data with level=Some { data.level.Value with time=data.level.Value.time - 1} }
+            let newData = { data with level={ data.level with time=data.level.time - 1} }
 
-            match newData.level.Value.time with
+            match newData.level.time with
             | t when t = 60 -> Printer.minute_warning() |> ignore; newData
             | t when t = 0 -> Printer.times_up() |> ignore; quit newData
             | _ -> newData         
@@ -117,7 +116,7 @@
 
         let roll (data:GameData) =
             let place = data.location;
-            let items = Levels.get_items_at_space place data.level.Value
+            let items = Levels.get_items_at_space place data.level
 
             let inp = Input.request "Roll what? "
 
@@ -125,8 +124,8 @@
 
             let roll_up (item:Item) (rest:Item list) =
                 let newItems = (items |> List.filter (fun i -> i <> item)) @ rest;
-                let otherItems = data.level.Value.items |> List.filter (fun i -> i.location <> place)
-                { data with katamari=data.katamari @ [item]; level=Some({ data.level.Value with items=otherItems @ (newItems |> List.map (fun i -> { item=i; location=place; })) }) }
+                let otherItems = data.level.items |> List.filter (fun i -> i.location <> place)
+                { data with katamari=data.katamari @ [item]; level={ data.level with items=otherItems @ (newItems |> List.map (fun i -> { item=i; location=place; })) } }
 
             let smash_katamari (data:GameData) =
                 match data.katamari with
@@ -137,7 +136,7 @@
 
                     let itemToDrop = data.katamari.[idx]
                     let newItems = (data.katamari |> take idx) @ (data.katamari |> skip (idx + 1))
-                    { data with katamari=newItems; level=Some({data.level.Value with items=data.level.Value.items @ [{ item=itemToDrop; location=place; }]}) }
+                    { data with katamari=newItems; level={data.level with items=data.level.items @ [{ item=itemToDrop; location=place; }]} }
 
             let report_status (data:GameData) =
                 Printer.status <| recalc_katamari data
@@ -166,15 +165,15 @@
 
         let play (data:GameData) =
 
-            Printer.transport data.level.Value
+            Printer.transport data.level
             Printer.royal_rainbow ()
-            Printer.welcome_level data.level.Value
+            Printer.welcome_level data.level
 
             let mutable mData = data;
 
             while mData.playingLevel do
                 mData <- handleMainCommandInput (Input.request "> ") mData
 
-            mData
+            true
 
 

@@ -6,51 +6,41 @@
         open GameData
         open Levels           
 
-        let quit data =
+        let quit () =
             Printer.bid_adieu()
-            { data with playing=false }
+            false
 
-        let progress data =
-            Printer.progress data
-            data
-
-        let invalid_level (data:GameData) =
-            printfn "I'm sorry that's not an available level"
-            data
-
-        let load_level (data:GameData) (level:Level) =
+        let load_level (level:Level) =
             let levelCopy = level;
-            { data with playingLevel=true; levelName=level.name; level=Some levelCopy; location=levelCopy.location; progress=level.number }
+            GameData.init levelCopy
 
-        let try_level data =
+
+        let try_level () =
             printf "Available levels are: "
             Levels.get_levels |> List.map (fun l -> l.name.Trim()) |> List.iter (printf "%s ")
             printfn ""
                         
             match Levels.get_level (Input.request "Which level would you like to play? ") with
-            | Some l -> PlayGame.play <| load_level data l
-            | None -> printfn "I'm sorry that's not an available level" |> ignore; data
+            | Some l -> PlayGame.play <| load_level l
+            | None -> printfn "I'm sorry that's not an available level" |> ignore; true
 
-        let handleInput (input:string) (data:GameData) =
+        let handleInput (input:string) =
             match input with
-            | "quit" | "q" -> quit data
-            | "progress" | "pr" -> progress data
-            | "play" | "pl" -> try_level data
-            | _ -> printfn "play, progress, save, quit" |> ignore; data
+            | "quit" | "q" -> quit()
+            | "play" | "pl" -> try_level()
+            | _ -> printfn "play, quit" |> ignore; true
 
         [<EntryPoint>]
         let main argv = 
             Printer.welcome()
 
-            // This should be the only mutable value ever (outside of getting input from the command line)
-            let mutable data = GameData.init            
+            let mutable keepPlaying = true
             
-            printfn "Time to start playing, what would you like to do? Valid commands are play, progress, save, quit"            
+            printfn "Time to start playing, what would you like to do? Valid commands are play, quit"            
 
-            while data.playing do
-                let inp = Input.request "> "
+            while keepPlaying do
+                keepPlaying <- handleInput (Input.request "> ")
 
-                data <- handleInput inp data
 #if DEBUG
             Console.ReadLine() |> ignore
 #endif

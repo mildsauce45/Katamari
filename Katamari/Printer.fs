@@ -84,9 +84,6 @@
         let pickup (item:Item) =
             printfn "Nice! You now have a %s stuck to your katamari!" item.name
 
-        let progress (data:GameData) =
-            printfn "You're on level %i, keep going! You can do it!" data.progress
-
         let transport (level:Level) =
             printfn "Transporting you to %s" level.name
 
@@ -97,8 +94,8 @@
             printfn "Your final katamari size is %Acm" size
 
         let display_items (items:Item list) =
-            match items.Length with
-            | 0 -> printfn "There is nothing there."
+            match items with
+            | [] -> printfn "There is nothing there."
             | _ -> printfn "There are %i items" items.Length
 
             items |> List.map (fun i -> i.name) |> List.iter (printfn "You see a %s")
@@ -112,5 +109,5 @@
             | _ -> printfn "Your katamari is made up of %s" (System.String.Join(", ", data.katamari |> List.map (fun i -> i.name )))
 
             match size with
-            | s when s > data.level.Value.goal -> printf ""
+            | s when s > data.level.goal -> printf ""
             | _ -> printfn "Move with N, S, E, W, and use Roll Up to add items to your Katamari"

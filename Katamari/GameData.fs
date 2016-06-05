@@ -30,13 +30,10 @@
         type GameData = {
             location: Coords;
             levelName: string;
-            playing: bool;
             playingLevel: bool;
-            progress: int;
-            level: Level option;
+            level: Level;
             katamari: Item list;
         }
 
-        let init =
-            let minusOne = -1; // huh? but it won't compile with a -1 in the record itself
-            { location={ x=minusOne; y=minusOne; }; levelName=""; playing=true; playingLevel=false; progress=minusOne; level=None; katamari=[]; }
+        let init (level:Level) =
+            { location={ x=level.location.x; y=level.location.y }; levelName=level.name; playingLevel=true; level=level; katamari=[]; }
