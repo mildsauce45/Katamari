@@ -19,6 +19,7 @@ $RECYCLE.BIN/
 
 bin/
 obj/
+.vs/
 
 # =========================
 # Operating System Files
