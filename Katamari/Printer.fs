@@ -6,45 +6,62 @@
         open System
 
         let banner () =
+            Console.ForegroundColor <- ConsoleColor.Red
             printfn "______ __      _____                                _____"
             printfn "___  //_/_____ __  /______ _______ _________ __________(_)"
+            Console.ForegroundColor <- ConsoleColor.Yellow
             printfn "__  ,<  _  __ `/  __/  __ `/_  __ `__ \  __ `/_  ___/_  /"
             printfn "_  /| | / /_/ // /_ / /_/ /_  / / / / / /_/ /_  /   _  /"
+            Console.ForegroundColor <- ConsoleColor.Green
             printfn "/_/ |_| \__,_/ \__/ \__,_/ /_/ /_/ /_/\__,_/ /_/    /_/"
             printfn "________"
+            Console.ForegroundColor <- ConsoleColor.Blue
             printfn "___  __ \_____ _______ _________ ___________  __"
             printfn "__  / / /  __ `/_  __ `__ \  __ `/  ___/_  / / /"
+            Console.ForegroundColor <- ConsoleColor.White
             printfn "_  /_/ // /_/ /_  / / / / / /_/ // /__ _  /_/ /"
             printfn "/_____/ \__,_/ /_/ /_/ /_/\__,_/ \___/ _\__, /"
             printfn "                                       /____/"
 
         let royal_rainbow () =
-            printfn "                          ROYAL RAINBOW"
-            printfn "                         RROYAL RAINBOWW"
-            printfn "                        RROOYAL RAINBOOWW"
-            printfn "                       RROOYYAL RAINBBOOWW"
-            printfn "                      RROOYYAAL RAINNBBOOWW"
-            printfn "                     RROOYYAALL RAIINNBBOOWW"
-            printfn "                    RRROOYYAALL RAAIINNBBOOWW"
-            printfn "                   RRROOOYYAALL RRAAIINNBBOOWW"
-            printfn "                  RRROOOYYYAALL RRAAIINNBBOOWWW"
-            printfn "                 RRROOOYYYAAALL RRAAIINNBBOOOWWW"
-            printfn "                RRROOOYYYAAALLL RRAAIINNBBBOOOWWW"
-            printfn "               RRRROOOYYYAAALLL RRAAIINNNBBBOOOWWW"
-            printfn "              RRRROOOOYYYAAALLL RRAAIIINNNBBBOOOWWW"
-            printfn "             RRRROOOOYYYYAAALLL RRAAAIIINNNBBBOOOWWW"
-            printfn "            RRRROOOOYYYYAAAALLL RRRAAAIIINNNBBBOOOWWW"
-            printfn "           RRRROOOOYYYYAAAALLLL RRRAAAIIINNNBBBOOOWWWW"
-            printfn "          RRRRROOOOYYYYAAAALLLL RRRAAAIIINNNBBBOOOOWWWW"
-            printfn "         RRRRROOOOOYYYYAAAALLLL RRRAAAIIINNNBBBBOOOOWWWW"
-            printfn "        RRRRROOOOOYYYYYAAAALLLL RRRAAAIIINNNNBBBBOOOOWWWW"
-            printfn "       RRRRROOOOOYYYYYAAAAALLLL RRRAAAIIIINNNNBBBBOOOOWWWW"
-            printfn "      RRRRROOOOOYYYYYAAAAALLLLL RRRAAAAIIIINNNNBBBBOOOOWWWW"
+            let handleChar char =
+                match char with
+                | 'r' -> Console.ForegroundColor <- ConsoleColor.Red
+                | 'y' -> Console.ForegroundColor <- ConsoleColor.Yellow
+                | 'g' -> Console.ForegroundColor <- ConsoleColor.Green
+                | 'b' -> Console.ForegroundColor <- ConsoleColor.Blue
+                | 'w' -> Console.ForegroundColor <- ConsoleColor.White
+                | _ -> printf "%c" char
+
+            let handleLine line =
+                line |> Seq.iter handleChar |> ignore; printfn ""
+
+            "                          yRgOYAL RAINbBOW" |> handleLine
+            "                         yRRgOYAL RAINbBOWW" |> handleLine
+            "                        yRROgOYAL RAINbBOOWW" |> handleLine
+            "                       yRROOgYYAL RAINbBBOOWW" |> handleLine
+            "                      yRROOYgYAAL RAINbNBBOOWW" |> handleLine
+            "                     yRROOYYgAALL RAIIbNNBBOOWW" |> handleLine
+            "                    yRRROOYYgAALL RAAIbINNBBOOWW" |> handleLine
+            "                   yRRROOOYYgAALL RRAAbIINNBBOOWW" |> handleLine
+            "                  yRRROOOYYYgAALL RRAAbIINNBBOOWWW" |> handleLine
+            "                 rRyRROOOYYYAgAALL RRAAbIINNBBOOOWWwW" |> handleLine
+            "                rRRyROOOYYYAAgALLL RRAAbIINNBBBOOOWwWW" |> handleLine
+            "               rRRRyROOOYYYAAgALLL RRAAbIINNNBBBOOOwWWW" |> handleLine
+            "              rRRRRyOOOOYYYAAgALLL RRAAbIIINNNBBBOOwOWWW" |> handleLine
+            "             rRRRROyOOOYYYYAAgALLL RRAAbAIIINNNBBBOwOOWWW" |> handleLine
+            "            rRRRROOyOOYYYYAAAgALLL RRRAbAAIIINNNBBBwOOOWWW" |> handleLine
+            "           rRRRROOOyOYYYYAAAAgLLLL RRRAbAAIIINNNBBBwOOOWWWW" |> handleLine
+            "          rRRRRROOOyOYYYYAAAAgLLLL RRRAbAAIIINNNBBBwOOOOWWWW" |> handleLine
+            "         rRRRRROOOOyOYYYYAAAAgLLLL RRRAbAAIIINNNBBBwBOOOOWWWW" |> handleLine
+            "        rRRRRROOOOOyYYYYYAAAAgLLLL RRRAbAAIIINNNNBBwBBOOOOWWWW" |> handleLine
+            "       rRRRRROOOOOYyYYYYAAAAAgLLLL RRRAbAAIIIINNNNBwBBBOOOOWWWW" |> handleLine
+            "      rRRRRROOOOOYYyYYYAAAAALgLLLL RRRAbAAAIIIINNNNwBBBBOOOOWWWW" |> handleLine
             printfn ""
-            printfn " ___  _____   ___   _      ___    _   ___ _  _ ___  _____      __"
-            printfn @"| _ \/ _ \ \ / /_\ | |    | _ \  /_\ |_ _| \| | _ )/ _ \ \    / /"
-            printfn @"|   / (_) \ V / _ \| |__  |   / / _ \ | || .` | _ \ (_) \ \/\/ /"
-            printfn @"|_|_\\___/ |_/_/ \_\____| |_|_\/_/ \_\___|_|\_|___/\___/ \_/\_/"
+            "r ___  _____   ___y   _      g___    _   b___ _  _ w___  _____      __" |> handleLine
+            @"r| _ \/ _ \ \ / /y_\ | |    g| _ \  /_\ b|_ _| \| |w _ )/ _ \ \    / /" |> handleLine
+            @"r|   / (_) \ V /y _ \| |__  g|   / / _ \ b| || .` |w _ \ (_) \ \/\/ /" |> handleLine
+            @"r|_|_\\___/ |_/y_/ \_\____| g|_|_\/_/ \_\b___|_|\_|w___/\___/ \_/\_/" |> handleLine
 
         let welcome () =
             banner()

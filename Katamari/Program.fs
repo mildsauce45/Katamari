@@ -27,7 +27,7 @@
         let handleInput (input:string) =
             match input with
             | "quit" | "q" -> quit()
-            | "play" | "pl" -> try_level()
+            | "play" | "p" | "pl" -> try_level()
             | _ -> printfn "play, quit" |> ignore; true
 
         [<EntryPoint>]
