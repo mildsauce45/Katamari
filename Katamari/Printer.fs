@@ -34,7 +34,7 @@
                 | _ -> printf "%c" char
 
             let handleLine line =
-                line |> Seq.iter handleChar |> ignore; printfn ""
+                line |> Seq.iter handleChar; printfn ""
 
             "                          yRgOYAL RAINbBOW" |> handleLine
             "                         yRRgOYAL RAINbBOWW" |> handleLine

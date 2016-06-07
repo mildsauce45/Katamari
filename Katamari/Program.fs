@@ -14,7 +14,6 @@
             let levelCopy = level;
             GameData.init levelCopy
 
-
         let try_level () =
             printf "Available levels are: "
             Levels.get_levels |> List.map (fun l -> l.name.Trim()) |> List.iter (printf "%s ")
@@ -22,24 +21,22 @@
                         
             match Levels.get_level (Input.request "Which level would you like to play? ") with
             | Some l -> PlayGame.play <| load_level l
-            | None -> printfn "I'm sorry that's not an available level" |> ignore; true
+            | None -> printfn "I'm sorry that's not an available level"; true
 
         let handleInput (input:string) =
             match input with
             | "quit" | "q" -> quit()
             | "play" | "p" | "pl" -> try_level()
-            | _ -> printfn "play, quit" |> ignore; true
+            | _ -> printfn "play, quit"; true
 
         [<EntryPoint>]
         let main argv = 
-            Printer.welcome()
-
-            let mutable keepPlaying = true
+            Printer.welcome()            
             
             printfn "Time to start playing, what would you like to do? Valid commands are play, quit"            
 
-            while keepPlaying do
-                keepPlaying <- handleInput (Input.request "> ")
+            while handleInput (Input.request "> ") do
+                1 |> ignore // We don't really want to do anything in the body, we just want to keep going until we say 'quit'
 
 #if DEBUG
             Console.ReadLine() |> ignore

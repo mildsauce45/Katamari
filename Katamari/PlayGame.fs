@@ -64,8 +64,8 @@
             let place = { data.location with x=data.location.x + x; y=data.location.y + y } // calculate the place to look at            
 
             match in_bounds place data with
-            | true -> Levels.get_items_at_space place data.level |> Printer.display_items |> ignore
-            | false -> printfn "To that way lies the void"
+            | true -> Levels.get_items_at_space place data.level |> Printer.display_items
+            | _ -> printfn "To that way lies the void"
 
         let look (data:GameData) =
             let options = "N, S, E, W, Here, or Katamari"
@@ -86,17 +86,17 @@
             let newData = { data with level={ data.level with time=data.level.time - 1} }
 
             match newData.level.time with
-            | t when t = 60 -> Printer.minute_warning() |> ignore; newData
-            | t when t = 0 -> Printer.times_up() |> ignore; quit newData
-            | _ -> newData         
+            | t when t = 60 -> Printer.minute_warning(); newData
+            | t when t = 0 -> Printer.times_up(); quit newData
+            | _ -> newData
 
         let move (dir:int*int) (data:GameData) =
             let x,y = dir
             let newLocation = { data.location with x=data.location.x + x; y=data.location.y + y }
 
             match in_bounds newLocation data with
-            | true -> look_at data dir |> ignore; tick_time data |> (fun d -> { d with location=newLocation; })
-            | false -> printfn "Ahh but you can't move there! Sorry, that's not in bounds" |> ignore; data
+            | true -> look_at data dir ; tick_time data |> (fun d -> { d with location=newLocation; })
+            | _ -> printfn "Ahh but you can't move there! Sorry, that's not in bounds"; data
 
         let north (data:GameData) =
             Printer.move North
@@ -144,11 +144,11 @@
 
             let try_roll (item:Item) (rest:Item list) =
                 match recalc_katamari data with
-                | i when i / 2.0 >= item.size -> Printer.pickup item |> ignore; roll_up item rest |> report_status
-                | _ -> Printer.fail item |> ignore; smash_katamari data
+                | i when i / 2.0 >= item.size -> Printer.pickup item; roll_up item rest |> report_status
+                | _ -> Printer.fail item; smash_katamari data
 
             match targets with
-            | [] -> printfn "I'm sorry, I don't see that item here" |> ignore; data
+            | [] -> printfn "I'm sorry, I don't see that item here"; data
             | x::rest -> try_roll x rest |> tick_time
 
         let handleMainCommandInput input (data:GameData) =
@@ -161,7 +161,7 @@
             | "west" | "w" -> west data
             | "roll" | "r" -> roll data
             | "quit" | "q" -> quit data
-            | _ -> printfn "look, time, north, east, south, west, roll, quit" |> ignore; data
+            | _ -> printfn "look, time, north, east, south, west, roll, quit"; data
 
         let play (data:GameData) =
 
